@@ -37,29 +37,23 @@ def findbyid():
     
     return;
 
-#Add Player
+#Add New Mode
 def insertPlayer():
-  fn = input("First Name: ")
-  ln = input("Last Name: ")
-  player_num = int(input("Number: "))
-  username = input("Username: ")
-  console = input("Console of choice(Enter Xbox, PS, or PC): ")
-  gender = input("Gender (M - Male, F- Female, NS- Prefer not to say): ")
-  dob = input("Date of Birth(): ")
+  mode = input("Name of the Mode: ")
+  descr = input("Describe the Mode: ")
 
   mycursor = mydb.cursor()
 
-  sql = "INSERT INTO Players (FIRST_NAME, LAST_NAME, NUMBER, USERNAME, CONSOLE, GENDER, DOB) " \
-                                   "VALUES(%s,%s,%s,%s,%s,%s,%s)"
+  sql = "INSERT INTO Mode (MODE_NAME, DESCRIPT) " \
+                                   "VALUES(%s,%s)"
   
-  arg = (fn, ln, player_num, username, console, gender, dob)
+  arg = (mode, descr)
 
   mycursor.execute(sql, arg)
 
   mydb.commit()
 
 #Delete Player
-
 def deletebyid():
 
     Num = int(input("Enter ID number you would like to delete: "))
@@ -75,25 +69,48 @@ def deletebyid():
 
 
 
-#Update Team Info
+#Update Match Score
+def updateMatch():
 
-# def updateTeam():
+  id = int(input("What is the Match ID you're trying to update? "))
+  sco = input("What is the new score? ")
+  mycursor = mydb.cursor()
 
+  sql = "UPDATE Matches SET SCORE = %s WHERE MATCH_ID = %s"
+
+  arg =(sco, id)
+
+  mycursor.execute(sql, arg)
+
+  mydb.commit()
 
 
 
 #Count Sum Of Kills Based off Team
 def sumofKillsperTeam():
-   team = input()
-    a = (1, 2, 3, 4, 5)
-x = sum(a, 7)
+  team = input("Which team do you want to calculate?(Bears, Rattlers, Tigers, or Wildcats): ")
+   
+  mycursor = mydb.cursor()
+   
+  sql = " select SUM(KILLS) FROM Player_Stats WHERE PLAYER_ID IN (SELECT PLAYER_ID FROM Players WHERE PLAYER_ID IN (SELECT PLAYER_ID FROM Player_Team WHERE TEAM_ID IN (SELECT TEAM_ID FROM Teams WHERE TEAM_NAME = %s)))"
+  arg = (team, )
+
+  mycursor.execute(sql, arg)
+
+  myresult = mycursor.fetchall()
+   
+  for x in myresult:
+    print(x)
+    
+  return;
+
 
 
 
 #Show Player with Least amount of Deaths based off Team
 
- def leastDeathsperTeam();
-x = min("Bears", "Rattlers", "Tigers", "Wildcats")
+# def leastDeathsperTeam():
+  
 
 
 
@@ -109,13 +126,13 @@ option = 0;
 while option != 8: 
     
     print("")
-    print("1. Add a player")
+    print("1. Add new game mode")
     print("2. Find a player by id")
     print("3. Delete a player")
     print("4. Show all players")
-    print("5. Update Team Info")
-    print("6. Find Total Kills for Each Team: ")
-    print("7. Find Player with the least amount of Deaths: ")
+    print("5. Update Match Score")
+    print("6. Find Total  Kills for each Team.")
+    print("7. Find Player with the least amount of Deaths")
     print("8. Exit")
     
     option = int(input("Choice: "))
@@ -128,5 +145,7 @@ while option != 8:
         deletebyid()
     elif option == 1:
         insertPlayer()
-        
-
+    elif option == 6:
+        sumofKillsperTeam()
+    elif option == 5:
+        updateMatch()
