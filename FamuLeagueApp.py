@@ -81,15 +81,19 @@ def deletebyid():
 
 
 
+
 #Count Sum Of Kills Based off Team
-# def sumofKillsperTeam():
-#   team = input()
+def sumofKillsperTeam():
+   team = input()
+    a = (1, 2, 3, 4, 5)
+x = sum(a, 7)
 
 
 
 #Show Player with Least amount of Deaths based off Team
 
-# def leastDeathsperTeam();
+ def leastDeathsperTeam();
+x = min("Bears", "Rattlers", "Tigers", "Wildcats")
 
 
 
@@ -124,4 +128,5 @@ while option != 8:
         deletebyid()
     elif option == 1:
         insertPlayer()
-    
+        
+
